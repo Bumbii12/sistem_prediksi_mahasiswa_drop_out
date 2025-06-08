@@ -68,8 +68,8 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
 ### Distribusi Data
 
 * Data seimbang antara kelas `Dropout` = 0 dan 1 (50:50)
-![distribusi numerik ]()
-![distribusi kategorikal ]()
+![distribusi numerik ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/distribusi_numerik.png)
+![distribusi kategorikal ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/distribusi_categorical.png)
 > Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
 ***
 ### Contoh Tampilan Dataset
@@ -97,14 +97,14 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
 
   * Digunakan metode IQR untuk mendeteksi dan menghapus outlier pada fitur numerik seperti `Attendance_Rate`, `LMS_Activity_Score`, dan `Work_Hours`. Outlier yang berada di luar rentang Q1 - 1.5*IQR atau Q3 + 1.5*IQR dihapus untuk menjaga konsistensi distribusi data.
 
-![heatmap ]()
+![heatmap ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/heatmap.png)
 > Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
 
 * **Feature Engineering dengan PCA**:
 
   * Principal Component Analysis (PCA) digunakan untuk mereduksi dimensi dari fitur numerik agar model dapat lebih fokus pada variasi utama dalam data. Dua komponen utama (principal components) digunakan sebagai fitur tambahan.
 
-![hasil pca ]()
+![hasil pca ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/hasil_pca.png)
 > Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
 
 * **Splitting**:
@@ -172,8 +172,24 @@ Karakteristik utama Random Forest:
 ### Hasil Evaluasi (berdasarkan kode notebook):
 
 
-![Confusion Matrix ]()
-> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
+![Confusion Matrix ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/confus_matrx.png)
+
+Accuracy Score: 0.8400
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.86      0.81      0.83        74
+           1       0.82      0.87      0.85        76
+
+    accuracy                           0.84       150
+   macro avg       0.84      0.84      0.84       150
+weighted avg       0.84      0.84      0.84       150
+
+
+ROC AUC Score: 0.8832
+
+> Model menunjukkan performa yang baik dengan akurasi 84%, precision dan recall seimbang di kedua kelas, serta skor ROC AUC 0.88 yang mengindikasikan kemampuan klasifikasi yang kuat dan seimbang antara mendeteksi dropout maupun non-dropout.
 
 
 ---
