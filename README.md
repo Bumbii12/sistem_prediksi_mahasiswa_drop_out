@@ -98,14 +98,17 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
   * Digunakan metode IQR untuk mendeteksi dan menghapus outlier pada fitur numerik seperti `Attendance_Rate`, `LMS_Activity_Score`, dan `Work_Hours`. Outlier yang berada di luar rentang Q1 - 1.5*IQR atau Q3 + 1.5*IQR dihapus untuk menjaga konsistensi distribusi data.
 
 ![heatmap ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/heatmap.png)
-> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
+> Berdasarkan heatmap korelasi, terlihat bahwa beberapa nilai GPA antar semester memiliki korelasi positif, mencerminkan konsistensi performa akademik mahasiswa dari waktu ke waktu. Namun, terdapat korelasi negatif cukup kuat antara GPA semester 7 dan 8, yang bisa mengindikasikan adanya penurunan performa menjelang akhir studi. Di sisi lain, fitur non-akademik seperti Attendance Rate, LMS Activity Score, dan Work Hours menunjukkan korelasi yang sangat lemah terhadap nilai GPA maupun antar sesamanya, yang mengisyaratkan bahwa pengaruhnya terhadap performa akademik bersifat kompleks dan tidak linear.
+
 
 * **Feature Engineering dengan PCA**:
 
   * Principal Component Analysis (PCA) digunakan untuk mereduksi dimensi dari fitur numerik agar model dapat lebih fokus pada variasi utama dalam data. Dua komponen utama (principal components) digunakan sebagai fitur tambahan.
 
 ![hasil pca ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/hasil_pca.png)
-> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
+> - Dua komponen utama berhasil menjelaskan sekitar 59.8% variansi dari 8 variabel GPA.
+- Sebaran data menyebar merata, tidak menunjukkan klaster jelas, artinya distribusi GPA mahasiswa cenderung kontinu dan tidak membentuk kelompok ekstrem.
+- Reduksi dimensi ini efisien untuk menyederhanakan model prediksi tanpa kehilangan banyak informasi. Sangat berguna untuk mengurangi kompleksitas model seperti Random Forest.
 
 * **Splitting**:
 
