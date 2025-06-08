@@ -1,4 +1,4 @@
-## 🧠 1. Business Understanding
+## 🤠 1. Business Understanding
 
 ### Problem Statements
 
@@ -68,7 +68,10 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
 ### Distribusi Data
 
 * Data seimbang antara kelas `Dropout` = 0 dan 1 (50:50)
-
+![distribusi numerik ]()
+![distribusi kategorikal ]()
+> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
+***
 ### Contoh Tampilan Dataset
 
 | Student\_ID | GPA\_Sem1 | GPA\_Sem2 | GPA\_Sem3 | GPA\_Sem4 | GPA\_Sem5 | GPA\_Sem6 | GPA\_Sem7 | GPA\_Sem8 | Attendance\_Rate | Retaken\_Courses | LMS\_Activity\_Score | Employment\_Status | Work\_Hours | Socioeconomic\_Status | Dropout |
@@ -79,32 +82,52 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
 | MHS004      | 2.632963  | 2.531376  | 2.778220  | 2.600768  | 2.500836  | 2.820631  | 2.208334  | 3.119932  | 100.00           | 0                | 41.99                | Employed           | 13          | Middle                | 0       |
 | MHS005      | 3.070948  | 3.090423  | 1.967964  | 2.705093  | 2.640558  | 2.207487  | 2.856562  | 2.435998  | 82.66            | 1                | 84.40                | Unemployed         | 28          | Middle                | 0       |
 
+
 ---
 
-## 🧹 3. Data Preparation
+## 🪹 3. Data Preparation
 
 ### Langkah-langkah:
 
 * **Encoding**:
 
-  * `LabelEncoder` digunakan untuk fitur kategorikal seperti `Employment_Status` dan `Socioeconomic_Status`.
+  * `LabelEncoder` digunakan untuk fitur kategorikal seperti `Employment_Status` dan `Socioeconomic_Status` agar dapat digunakan dalam model ML.
 
 * **Outlier Handling**:
 
-  * Digunakan metode IQR untuk mendeteksi dan mengatasi outlier pada fitur numerik, yang dapat memperburuk performa model jika dibiarkan.
+  * Digunakan metode IQR untuk mendeteksi dan menghapus outlier pada fitur numerik seperti `Attendance_Rate`, `LMS_Activity_Score`, dan `Work_Hours`. Outlier yang berada di luar rentang Q1 - 1.5*IQR atau Q3 + 1.5*IQR dihapus untuk menjaga konsistensi distribusi data.
+
+![heatmap ]()
+> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
 
 * **Feature Engineering dengan PCA**:
 
-  * Principal Component Analysis diterapkan untuk mereduksi dimensi data dan menjaga informasi utama, membantu meningkatkan efisiensi model dan mengurangi noise.
+  * Principal Component Analysis (PCA) digunakan untuk mereduksi dimensi dari fitur numerik agar model dapat lebih fokus pada variasi utama dalam data. Dua komponen utama (principal components) digunakan sebagai fitur tambahan.
+
+![hasil pca ]()
+> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
 
 * **Splitting**:
 
-  * Dataset dibagi menjadi **train-test** dengan rasio 80:20, memastikan model dapat dievaluasi pada data yang tidak terlihat sebelumnya.
+  * Dataset dibagi menjadi **training set (80%)** dan **testing set (20%)** untuk mengevaluasi generalisasi model terhadap data yang belum terlihat sebelumnya.
 
 * **Scaling dan Transformasi**:
 
-  * Setelah data di-split, fitur numerik pada data training dan testing dinormalisasi dengan `StandardScaler`. Hal ini penting agar model tidak bias terhadap fitur dengan skala lebih besar.
-  * PCA juga diterapkan pasca-scaling untuk memastikan transformasi dilakukan dengan konsisten pada ruang vektor yang terstandarisasi.
+  * Setelah data di-split, fitur numerik di-training set dan test set dinormalisasi dengan `StandardScaler` untuk memastikan skala seragam.
+  * PCA kemudian diterapkan pada hasil scaling untuk memastikan konsistensi transformasi dalam ruang fitur terstandarisasi.
+
+### Statistik Deskriptif X\_test Setelah Transformasi
+
+|           | Attendance\_Rate | Retaken\_Courses | LMS\_Activity\_Score | Work\_Hours | principal component 1 | principal component 2 |
+| --------- | ---------------- | ---------------- | -------------------- | ----------- | --------------------- | --------------------- |
+| **count** | 150.000000       | 150.000000       | 150.000000           | 150.000000  | 150.000000            | 150.000000            |
+| **mean**  | 0.027599         | -0.064618        | -0.076259            | 0.037951    | 0.080196              | -0.052264             |
+| **std**   | 1.080562         | 0.998055         | 1.011863             | 0.974867    | 0.909342              | 0.982594              |
+| **min**   | -3.014058        | -1.306229        | -2.940263            | -1.606092   | -2.692334             | -2.452117             |
+| **25%**   | -0.813761        | -1.078550        | -0.734873            | -0.707856   | -0.605996             | -0.716297             |
+| **50%**   | 0.110367         | -0.395512        | -0.040711            | 0.135941    | 0.137851              | -0.089473             |
+| **75%**   | 0.840090         | 0.515206         | 0.626226             | 0.761984    | 0.711575              | 0.550795              |
+| **max**   | 1.726464         | 1.881282         | 1.585400             | 2.422359    | 2.397943              | 2.878029              |
 
 ---
 
@@ -116,20 +139,22 @@ Dataset terdiri dari **500 mahasiswa**, masing-masing memiliki fitur:
 
 ### Penjelasan Algoritma
 
-Random Forest merupakan algoritma ensemble learning yang membangun banyak pohon keputusan (decision tree) pada berbagai subset data, lalu menggabungkan hasil prediksinya melalui voting (klasifikasi) atau rata-rata (regresi).
+Random Forest adalah algoritma berbasis ensemble learning yang membangun banyak pohon keputusan (decision tree) menggunakan subset acak dari data dan fitur. Setiap pohon memberikan satu prediksi, dan prediksi akhir ditentukan berdasarkan voting mayoritas (untuk klasifikasi).
 
-Keunggulan utama Random Forest:
+Karakteristik utama Random Forest:
 
-* Dapat menangani dataset dengan fitur numerik dan kategorikal tanpa perlu banyak pra-pemrosesan.
-* Tahan terhadap overfitting karena menggabungkan hasil dari banyak pohon.
-* Menyediakan metrik penting seperti feature importance untuk menginterpretasi model.
+* Menggabungkan banyak pohon untuk meningkatkan akurasi dan stabilitas.
+* Mengurangi risiko overfitting dibanding decision tree tunggal.
+* Memberikan feature importance, memungkinkan kita memahami variabel apa yang paling berkontribusi terhadap prediksi.
+* Mendukung data numerik dan kategorikal, serta toleran terhadap missing values.
 
 ### Alasan Pemilihan
 
-* **Kinerja Baik untuk Data Tabular**: Random Forest sangat efektif untuk data tabular seperti dataset mahasiswa.
-* **Robust terhadap Outlier dan Missing Values**: Memberikan toleransi terhadap data yang tidak sempurna.
-* **Interpretabilitas**: Fitur penting dapat diidentifikasi, sehingga bermanfaat bagi institusi dalam mengetahui faktor-faktor utama dropout.
-* **Cepat dan Stabil**: Training time relatif singkat dan dapat di-paralelkan.
+* **Kinerja Tinggi di Data Tabular**: Random Forest dikenal memiliki performa sangat baik dalam menangani dataset tabular dengan banyak fitur.
+* **Robust terhadap Outliers dan Noise**: Dengan agregasi dari banyak pohon, model lebih stabil dan tidak terlalu terpengaruh data ekstrem.
+* **Kemampuan Generalisasi Baik**: Cocok untuk menghindari overfitting meskipun data relatif kecil.
+* **Interpretabilitas**: Dapat digunakan untuk analisis feature importance untuk memahami pola dropout mahasiswa.
+* **Mudah Diimplementasikan dan Cepat**: Library `scikit-learn` menyediakan implementasi Random Forest yang efisien dan mudah digunakan.
 
 ---
 
@@ -146,22 +171,11 @@ Keunggulan utama Random Forest:
 
 ### Hasil Evaluasi (berdasarkan kode notebook):
 
-> *Silakan konfirmasi jika ingin saya jalankan sel evaluasi model agar hasil akurasi dan metrik lainnya bisa dicantumkan di sini.*
+
+![Confusion Matrix ]()
+> Distribusi setiap variabel cukup bagus setelah outliersnya ditangani
+
 
 ---
 
 ## 🚀 6. Deployment
-
-### Status
-
-* Model belum dideploy ke sistem produksi.
-* Namun dapat disiapkan untuk:
-
-  * Integrasi ke dashboard monitoring.
-  * Pengujian lebih lanjut dengan data nyata.
-
----
-
-### ✅ Catatan Tambahan:
-
-Jika Anda ingin laporan ini dalam bentuk **dokumen Word / PDF**, atau ingin **diagram alur CRISP-DM** juga disertakan, saya bisa bantu buatkan.
