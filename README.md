@@ -1,5 +1,10 @@
 # Laporan Sistem Prediksi Mahasiswa Beresiko Tinggi Dorp Out (DO): [Dummy Datasets]
 
+## Project Overview
+Proyek ini bertujuan untuk membangun sistem prediksi mahasiswa yang berisiko tinggi mengalami drop out (DO) dari perguruan tinggi dengan menggunakan pendekatan machine learning berbasis data sintetis. Melalui proses pemodelan yang menyeluruh, data akademik (GPA per semester) dan non-akademik (kehadiran, aktivitas e-learning, jam kerja, dll.) dianalisis guna mengidentifikasi pola yang dapat digunakan untuk mengklasifikasikan mahasiswa ke dalam kategori berisiko atau tidak. Proyek ini tidak hanya fokus pada akurasi prediksi, tetapi juga memberikan pemahaman terhadap fitur-fitur yang paling memengaruhi kemungkinan DO, dengan harapan sistem ini dapat menjadi alat bantu intervensi dini bagi pihak kampus.
+
+Untuk mencapai tujuan tersebut, pipeline pemrosesan data dilakukan secara sistematis, dimulai dari encoding, normalisasi, penanganan outlier dengan metode IQR, hingga reduksi dimensi menggunakan PCA. Model klasifikasi Random Forest dipilih karena keandalannya dalam menangani data tabular dan interpretabilitasnya yang tinggi. Evaluasi menggunakan metrik seperti akurasi, precision, recall, F1-score, dan ROC AUC menunjukkan performa yang sangat baik dengan skor akurasi 84% dan AUC sebesar 0.88. Hasil ini memperkuat potensi sistem untuk digunakan dalam praktik nyata, membantu institusi pendidikan dalam meningkatkan retensi mahasiswa dan kualitas layanan akademik.
+
 ## 🤠 1. Business Understanding
 
 ### Problem Statements
@@ -179,20 +184,20 @@ Karakteristik utama Random Forest:
 
 ![Confusion Matrix ](https://raw.githubusercontent.com/Bumbii12/sistem_prediksi_mahasiswa_drop_out/refs/heads/main/img/confus_matrx.png)
 
-Accuracy Score: 0.8400
+- **Accuracy Score**: `0.8400`
 
-Classification Report:
-              precision    recall  f1-score   support
+#### 📋 Classification Report:
 
-           0       0.86      0.81      0.83        74
-           1       0.82      0.87      0.85        76
+| Class | Precision | Recall | F1-Score | Support |
+|-------|-----------|--------|----------|---------|
+| 0     | 0.86      | 0.81   | 0.83     | 74      |
+| 1     | 0.82      | 0.87   | 0.85     | 76      |
 
-    accuracy                           0.84       150
-   macro avg       0.84      0.84      0.84       150
-weighted avg       0.84      0.84      0.84       150
+|       | Accuracy | Macro Avg | Weighted Avg |
+|-------|----------|------------|---------------|
+|       | 0.84     | 0.84 / 0.84 / 0.84 | 0.84 / 0.84 / 0.84 |
 
-
-ROC AUC Score: 0.8832
+- **ROC AUC Score**: `0.8832`
 
 > Model menunjukkan performa yang baik dengan akurasi 84%, precision dan recall seimbang di kedua kelas, serta skor ROC AUC 0.88 yang mengindikasikan kemampuan klasifikasi yang kuat dan seimbang antara mendeteksi dropout maupun non-dropout.
 
